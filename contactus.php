@@ -1,22 +1,110 @@
+<?php
+include './payment/connect.php';
+//check variable exists
+if(isset($_POST['submit'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $content = $_POST['feedbackContent'];
+    
+    //insert valeies into DB
+        $sql = "INSERT INTO feedback(name,email,feedbackContent) VALUES ('$name','$email','$content')";
+        $result = mysqli_query($con, $sql);
+        if($result){
+            //redirect & success message as a query parameter
+            header('location: aboutus.php?message=success');
+            exit();
+        }else{
+            //unsuccesful, error message
+            die(mysqli_error($con));
+        }
+}
+   //if ($result) {
+   // echo "Data inserted successfully";
+   // } else {
+   // echo "Error: " . $sql . "<br>" . mysqli_error($con);
+   // }     
+   // }
+
+?>
+
+
+
+
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to edit this template
--->
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-        <title></title>
-        <style>
-            footer{
-                margin-top: 1010px;
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;
+background-color: black;
+}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: limegreen;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: darkgreen;
+}
+
+.container {
+
+  border-radius: 5px;
+  background-color: lightgoldenrodyellow;
+  padding: 20px;
+  width: 1200px;
+  margin-left: 120px;
+  margin-top: -20px;
+}
+button.cancelFeedback {
+  float:right;
+  margin-right: 0px;
+  margin-top: -50px;
+  background-color: green; 
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: white; 
+  color: black; 
+  border: 2px solid blueviolet;
+  border-radius: 8px;
+}
+
+
+button.cancelFeedback:hover {
+  background-color: blueviolet;
+  color: white;
+}
+
+ footer{
+                margin-top: 100px;
             }
-            
-            .contain{
-                position: absolute;
-                top: 1900px;
+
+        .contain{
+                position: relative;
+                top: 100px;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
@@ -68,7 +156,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             }
             
             .footer-basic .copyright {
-                margin-top: 20px;
+                margin-top: -80px;
                 text-align:center;
                 font-size:16px;
                 color:grey;
@@ -123,10 +211,52 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     top: -10%;
                 }                          
             }
-        </style>
-    </head>
-    <body>
-        <footer>
+
+
+
+</style>
+</head>
+<body>
+    <?php
+    include './header.php';
+    
+    ?>
+
+
+<div class="container">
+    <h3 style="font-size: 30px; padding-left: 2px;margin-top: 10px;">Contact Form</h3>
+   <form action="" method="POST">
+   <button class="cancelFeedback" onclick="cancelFeedback()">Back</button>  
+   <br><label for="name">Name</label>
+    <br><input type="text" id="name" name="name" placeholder="Your name..." style="width: 300px;" required>
+    <br><label for="email">Email Address</label>
+    <br><br><input type="email" id="email" name="email" placeholder="Your email..." style="width: 500px;height:40px; padding-left: 10px;" required>
+          
+    <br><br><label for="subject">Content</label>
+    <br><textarea id="content" name="feedbackContent" placeholder="Tell us more" style="height:200px;" required></textarea>
+
+    <input type="submit" name="submit" value="Submit">
+  </form>
+</div>
+</body>
+
+<script>
+  //Cancel Checkout function
+  //if user click confirm, they will link to movies.php
+  function cancelFeedback() {
+  var confirmation = confirm("Are you sure you want to go back?");
+  if (confirmation) {
+  alert("Have a Nice Day !");
+  window.location.href = "aboutus.php";
+    }
+ }
+ 
+
+
+
+ 
+ </script>
+ <footer>
                 <hr style="color: white;">
         <div class="contain">
             <a href="https://www.facebook.com/tarumtkl/?locale=ms_MY" class="btn">
@@ -154,6 +284,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             <a href="#" class="to-top">Back to top</a>
         </div>
         </footer>
-    </body>
 </html>
-

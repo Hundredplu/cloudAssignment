@@ -1,22 +1,41 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to edit this template
--->
 <html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-        <title></title>
-        <style>
-            footer{
-                margin-top: 1010px;
+	<title>Description</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/assignment.css" rel="stylesheet" type="text/css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+                        background-color: black;
+                        color: white;
+		}
+                		
+                table tbody {
+                    color: white;
+                }
+                
+                .scroll {
+                    height: 200px;
+                    width: 700px;
+                    overflow: auto;
+                }
+                
+                footer{
+                margin-top: 200px;
             }
             
             .contain{
-                position: absolute;
-                top: 1900px;
+                position: relative;
+                top: 200px;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
@@ -78,12 +97,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             .to-top{
                 color:white;
                 padding-top:1.8em;
-                display:inline-block;/* or block */
-                position:relative;
+                display: block;/* or block */
+                position:absolute;
                 border-color:white;
                 text-decoration:none;
                 transition:all .3s ease-out;
-                right: 44%;
+                left: 4%;
                 margin-top: 50px;
             }
             .to-top:before{
@@ -123,9 +142,66 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     top: -10%;
                 }                          
             }
-        </style>
+            </style>
     </head>
     <body>
+        <?php
+        include './header.php';
+        include './config/helper2.php';
+        //array map between table field name & table 
+        //display name
+        $header = array(
+          'mvid' => 'Movie ID',
+          'title' => 'Movie Title',
+          'cover_img' => 'Image',
+          'description' => 'Description',
+          'duration' => 'Duration',
+          'date_showing' => 'Date Showing',
+          'end_date' => 'End Date'
+        );     
+        ?>
+
+        <form action="" method="POST">
+        <table border="1" class="table">
+            <tbody>
+                <?php
+            //retrieve records from DB
+            //in order to connect to db - 4 parameters
+            //1. hostname 2. username 3. password 4. db name
+            //Step1: connect php app with DB
+            //object oriented method    
+            
+            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            
+            //step2: sql statement
+            $sql = "SELECT * FROM movies";
+            
+            //step3: run sql
+            //$result - keep all student records
+            if($result = $con->query($sql)){               
+                //retrieve record 1 by 1 and display
+                while ($record = $result->fetch_object()){
+                    //display output
+                    printf("<tr>
+                        <td><img style='height: 200px; width: 150px; margin-left: 50px;' src='images/%s'></td>
+                        <td style='font-size: 20px;'>Title : %s<br>Duration : %s<br>Showing Date : %s<br>End Date : %s</td>
+                        <td style='font-size: 20px;'>
+                        <div class='scroll' style='border: solid 1px white;'>
+                        <div id='description' style='padding-left: 10px;'>
+                        %s
+                        </div>
+                        </div>
+                        </td>
+                            </tr>", $record->cover_img, $record->title, $record->duration, $record->date_showing, $record->end_date, $record->description);
+                }
+            }
+            //step4: close connection, release memory from $result
+            $result->free();
+            $con->close();
+            ?>  
+                </tbody>
+        </table>
+        </form>
         <footer>
                 <hr style="color: white;">
         <div class="contain">
@@ -156,4 +232,3 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         </footer>
     </body>
 </html>
-
